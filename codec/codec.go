@@ -21,7 +21,7 @@ type Codec interface {
 }
 
 // NewCodecFunc Codec的构造函数
-type NewCodecFunc func(writer io.ReadWriter) Codec
+type NewCodecFunc func(writer io.ReadWriteCloser) Codec
 
 // Type body选用的编解码方式
 type Type string
@@ -36,4 +36,6 @@ var NewCodecFuncMap map[Type]NewCodecFunc
 
 func init() {
 	NewCodecFuncMap = make(map[Type]NewCodecFunc)
+	NewCodecFuncMap[GobType] = NewGobCodec
+	NewCodecFuncMap[JsonType] = NewJsonCodec
 }
