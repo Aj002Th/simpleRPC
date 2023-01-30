@@ -13,7 +13,7 @@ type Header struct {
 }
 
 // Codec request的编解码器
-// body部分预期是argv(请求参数)+replyv(响应结果)两个部分
+// body部分预期是argv结构,包含一组参数
 type Codec interface {
 	io.Closer
 	ReadHeader(*Header) error

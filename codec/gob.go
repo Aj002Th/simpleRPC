@@ -38,17 +38,22 @@ func (g GobCodec) ReadBody(body any) error {
 }
 
 func (g GobCodec) Write(header *Header, body any) error {
+	var err error
 	defer func() {
 		_ = g.buf.Flush()
-		_ = g.Close()
+
+		// 写入出现问题的话就把整条连接关闭了
+		if err != nil {
+			_ = g.Close()
+		}
 	}()
 
-	if err := g.enc.Encode(header); err != nil {
+	if err = g.enc.Encode(header); err != nil {
 		log.Printf("rpc codec: encoding header error: %v\n", err)
 		return err
 	}
 
-	if err := g.enc.Encode(body); err != nil {
+	if err = g.enc.Encode(body); err != nil {
 		log.Printf("rpc codec: encoding body error: %v\n", err)
 		return err
 	}

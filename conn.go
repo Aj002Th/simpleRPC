@@ -1,6 +1,9 @@
-package simpleRPC
+package simrpc
 
-import "simrpc/codec"
+import (
+	"reflect"
+	"simrpc/codec"
+)
 
 // 与rpc连接相关的结构定义
 
@@ -20,4 +23,16 @@ type Option struct {
 var DefaultOption = &Option{
 	MagicNumber: MagicNumber,
 	CodeType:    codec.GobType,
+}
+
+// 其实这里包含了request和response
+type request struct {
+	// header部分
+	header *codec.Header
+
+	// request body部分
+	argv reflect.Value
+
+	// response body部分
+	reply reflect.Value
 }
